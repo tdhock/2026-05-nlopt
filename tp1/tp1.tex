@@ -1,0 +1,65 @@
+\documentclass[12pt]{article}
+
+\usepackage{fullpage}
+\usepackage[utf8]{inputenc}
+
+\begin{document}
+
+TP1, ROP631, été 2026, Prof. Toby HOCKING, à rendre le 5 juin.
+
+\section{exercices 1.4.2 et 2.3.5}
+ Consid\'erez une hyperbole de $\Re^2$, $y=1/x$. Soit un point
+ $P={P_x\choose P_y}$, on veut trouver le point de l'hyperbole le plus
+ proche de $P$. Comme les points de l'hyperbole sont de la forme
+ ${x\choose 1/x}$, on peut ramener l'\'etude \`a la minimisation selon
+ la seule variable $x$ de la fonction $d(x) = (x-P_x)^2 + ({1\over x}-P_y)^2$.
+ \begin{enumerate}
+ \item \'Ecrivez les conditions d'optimalit\'e (d'ordre un et deux) de ce probl\`eme
+   $\min_{x\in\Re}d(x)$.
+ \item Pour $P=(2,3)^t$, utilisez Julia pour obtenir la solution.
+ \item Si le point $P$ est sur la droite $y=x$, on devine qu'il y a
+   2 candidats solution naturels: $1\choose 1$ et $-1\choose -1$. En
+   vous limitant aux $x>0$, vérifiez cette
+   intuition en utilisant les conditions d'optimalité; vérifiez
+   d'abord que $x=1$ est un point stationnaire pour
+   $d(x)$. Vérifiez ensuite que
+   l'intuition n'est pas vraie si $P$ est assez loin de l'origine;
+   quantifiez ce ``loin'' de l'origine en utilisant les conditions
+   d'optimalité d'ordre 2.)
+ \end{enumerate}
+
+\section{exercice 2.4.5}
+
+\begin{enumerate}
+\item \`A partir de $x=1$, appliquez l'algorithme {\tt
+    trouve\_intervalle} pour le point $P={1\choose 2}$; utilisez un
+  paramètre $\delta=0.5$. \label{iii}
+\item \`A partir de l'intervalle trouv\'e en a), effectuez
+  une \'etape de l'algorithme {\tt bissec\-tion} (toujours pour le
+  point $P={1\choose 2}$). \label{iv}
+\end{enumerate}
+
+\section{exercice 2.5.6}
+
+\`A partir de chacune des extrémités de la sortie de \verb|trouve_intervalle|, effectuez une it\'eration de l'algorithme {\tt Newton-Raphson}(toujours pour le point $P={1\choose 2}$).
+
+\section{Implantation d'algorithme}
+
+Il s'agit de produire
+du code qui implémente l'algorithme de région de confiance (algorithme 2.5, page 90 des
+notes). Pour une fonction donnée $h(t)$ de classe $C^2$, à partir d'un point de départ arbitraire
+$t_0$, l'algorithme calcule un minimum local de $h$.
+Le fichier \verb|TR_1D_fr.jl| contient une enveloppe du code que vous devrez compléter. Le
+fichier \verb|exemple.jl| contient le script que vous appelerez, qui charge une de quatre fonctions
+fournies en exemple, exécute \verb|TR_1D|. La version \verb|_fr| comporte des commentaires en français.
+Tous ces fichiers étaient dans le TD0.
+Vous devez :
+\begin{enumerate}
+\item compléter le code de l'algorithme dans le fichier \verb|TR_1D_fr.jl| ;
+\item enlever le \verb|maxiter = 1| du fichier \verb|exemple.jl| pour tester correctement votre solution ;
+\item exécuter votre code sur les quatre exemples fournis ;
+\item valider les résultats sur les quatre exemples fournis ;
+\item justifier que l'ordre de convergence asymptotique est quadratique. Astuce : lire section 2.6. Pour chaque itération $x_k$, calculer l’erreur $\epsilon_k=x_k-\bar x$, où $\bar x$ est la solution trouvée. Ensuite calculez $|\epsilon_{k+1}|/|\epsilon_k|^p$ pour $p=1$ (linéare) et $p=2$ (quadratique).
+\end{enumerate}
+
+\end{document}
