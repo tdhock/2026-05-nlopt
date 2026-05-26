@@ -175,8 +175,9 @@ ggplot()+
   facet_grid(initial.x ~ Frame)
 
 selected.color <- "red"
-animint(
+viz <- animint(
   title="Newton’s method for stationary point finding",
+  source="https://github.com/tdhock/2026-05-nlopt/blob/main/figure-newton.R",
   approx=ggplot()+
     ggtitle("Objective and iterations for selection")+
     scale_x_continuous("x = optimization variable")+
@@ -308,3 +309,7 @@ animint(
   duration=list(Frame=500),
   time=list(ms=1000, variable="Frame")
 )
+
+if(FALSE){
+  animint2pages(viz, "2026-05-25-Newton-stationary-point", chromote_sleep_seconds=3)
+}
