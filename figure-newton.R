@@ -1,7 +1,7 @@
 library(data.table)
 library(animint2)
 x.min <- 0
-x.max <- 4*pi
+x.max <- 5*pi
 thresh.x <- function(xbar)fcase(
   xbar < x.min, -Inf,
   xbar > x.max, Inf,
@@ -174,7 +174,16 @@ ggplot()+
     data=quad.line.dt)+
   facet_grid(initial.x ~ Frame)
 
+(prev.dt <- initial.dt[
+  initial.dt,
+  on=.(initial.x, iteration <= iteration),
+  data.table(offset=(0:2)/3)[, data.table(
+    initial.x, iteration=x.iteration, Frame=i.Frame+offset,
+    x0, fx, point="f(x) prev"
+  ), by=offset],
+  nomatch=0L])
 selected.color <- "red"
+history.color <- "grey"
 viz <- animint(
   title="Newton’s method for stationary point finding",
   source="https://github.com/tdhock/2026-05-nlopt/blob/main/figure-newton.R",
@@ -182,19 +191,41 @@ viz <- animint(
     ggtitle("Objective and iterations for selection")+
     scale_x_continuous("x = optimization variable")+
     scale_y_continuous("f(x) = optimization objective")+
+    scale_color_manual(values=c(
+      "f(x) objective"="black",
+      "q(x) approx"="violet"))+
+    scale_fill_manual(values=c(
+      "f(x) prev"=history.color,
+      "f(x*) guess"="grey50",
+      "q'(x)=0"="violet"))+
+    theme_bw()+
     theme_animint(width=800, colspan=2, last_in_row=TRUE)+
+    coord_cartesian(ylim=c(y.min, y.max))+
     geom_line(aes(
       grid.x, fx, color=Function),
       data=grid.dt[, Function := "f(x) objective"])+
+    geom_path(aes(
+      thresh.x(x0), fx,
+      key=1),
+      color=history.color,
+      showSelected=c("initial.x","Frame"),
+      data=prev.dt)+
     geom_point(aes(
-      thresh.x(x0), inf.f(fx),
+      thresh.x(x0), fx,
+      key=iteration,
+      fill=point),
+      showSelected=c("initial.x","Frame"),
+      size=3,
+      data=prev.dt)+
+    geom_point(aes(
+      thresh.x(x0), fx,
       key=1,
       fill=point),
       showSelected=c("initial.x","Frame"),
       size=5,
       data=init.point.dt[, point := what])+
     geom_path(aes(
-      grid.x, thresh.f(qx),
+      grid.x, qx,
       key=1,
       color=Function),
       showSelected=c("initial.x","Frame"),
@@ -307,8 +338,11 @@ viz <- animint(
       data=data.table(yvar="f(x)", init.point.dt))+
     make_tallrect(init.point.dt, "Frame"),
   duration=list(Frame=500),
-  time=list(ms=1000, variable="Frame")
+  time=list(ms=1000, variable="Frame"),
+  out.dir="figure-newton",
+  first=list(initial.x=12.2)
 )
+viz
 
 if(FALSE){
   animint2pages(viz, "2026-05-25-Newton-stationary-point", chromote_sleep_seconds=3)
