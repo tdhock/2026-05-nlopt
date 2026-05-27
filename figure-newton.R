@@ -84,7 +84,7 @@ first.show <- data.table(first.dt)[, xthresh := thresh.x(xbar)][]
   initial.dt,
   on=.(initial.x, iteration <= iteration),
   data.table(offset=(0:2)/3)[, data.table(
-    initial.x, iteration=x.iteration, Frame=i.Frame+offset,
+    initial.x, iteration=x.iteration, Frame=i.iteration+offset,
     x0, fx, point="f(x) prev"
   ), by=offset],
   nomatch=0L])
