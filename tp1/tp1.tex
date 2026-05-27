@@ -59,7 +59,7 @@ Vous devez :
 \item enlever le \verb|maxiter = 1| du fichier \verb|exemple.jl| pour tester correctement votre solution ;
 \item exécuter votre code sur les quatre exemples fournis ;
 \item valider les résultats sur les quatre exemples fournis ;
-\item justifier que l'ordre de convergence asymptotique est quadratique. Astuce : lire section 2.6. Pour chaque itération $x_k$, calculer l’erreur $\epsilon_k=x_k-\bar x$, où $\bar x$ est la solution trouvée. Ensuite calculez $|\epsilon_{k+1}|/|\epsilon_k|^p$ pour $p=1$ (linéare) et $p=2$ (quadratique).
+\item justifier que l'ordre de convergence asymptotique est quadratique. Astuce : lire section 2.6. Pour chaque itération $x_k$, calculer l’erreur $\epsilon_k=x_k-\bar x$, où $\bar x$ est la solution trouvée, et les derivées, $f'(x_k)$. Pour convergence quadratique, on devrait voir le nombre de zeros doubler à chaque itération ($10^{-1}=0.1$, $10^{-2}=0.01$, $10^{-4}=0.0001$, $10^{-8}=0.00000001$, ...).  
 \end{enumerate}
 
 \end{document}
