@@ -229,11 +229,11 @@ viz <- animint(
     geom_path(aes(
       Frame, log10(abs.grad)),
       showSelected="initial.x",
-      data=data.table(yvar="f'(x)", initial.dt[, Frame := iteration]))+
+      data=data.table(yvar="log10[abs(grad)]", initial.dt[, Frame := iteration]))+
     geom_point(aes(
       Frame, log10(abs.grad)),
       showSelected="initial.x",
-      data=data.table(yvar="f'(x)", initial.dt))+
+      data=data.table(yvar="log10[abs(grad)]", initial.dt))+
     geom_path(aes(
       Frame, inf.f(fx)),
       showSelected="initial.x",
