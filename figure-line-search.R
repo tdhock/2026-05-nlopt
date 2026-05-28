@@ -21,11 +21,11 @@ grid.dt <- data.table(grid.x, fx=sin(grid.x), what="objective")
 grid.by <- 0.1
 grid.by <- 2
 initial.x <- seq(x.min, x.max, by=grid.by)[-1]
-approx.dt.list <- list()
+ls.dt.list <- list()
 armijo.dt.list <- list()
 initial.dt.list <- list()
 grad.dt.list <- list()
-initial.x=5
+initial.x=8
 for(initial.i in seq_along(initial.x)){
   x0 <- first.x <- initial.x[initial.i]
   done <- FALSE
@@ -54,31 +54,36 @@ for(initial.i in seq_along(initial.x)){
     abline(armijo.intercept, armijo.slope)
     armijo.vec <- armijo.intercept+step.size*armijo.slope
     points(step.size, armijo.vec)
-    points(step.size, fx.at.step)
     armijo.ok <- fx.at.step<armijo.vec
-    if(all(armijo.ok==FALSE))stop("no admissible steps")
+    if(all(armijo.ok==FALSE))stop("no armijo steps")
     first.ok <- which(armijo.ok)[1]
     armijo.show <- 1:first.ok
-    approx.dt.list[[paste(initial.i, iteration)]] <- data.table(
-      initial.i, initial.x=first.x, iteration, grid.x, qx=Taylor(grid.x), what="approx")
-    new.x <- x0+cos(x0)/sin(x0)
+    armijo.class <- rep(NA, length(armijo.ok))
+    armijo.class[armijo.show] <- FALSE
+    armijo.class[first.ok] <- TRUE
+    points(step.size, fx.at.step, col=ifelse(armijo.class, "black", "red"))
+    ls.dt.list[[paste(initial.i, iteration)]] <- data.table(
+      initial.i, initial.x=first.x, iteration, 
+      step=step.size, armijo=armijo.vec, fx=fx.at.step,
+      frame(length(armijo.show))
+    )[armijo.show]
+    armijo.step <- step.size[first.ok]
+    new.x <- x0+x0.dir*armijo.step
     if(new.x==x0)done <- TRUE
     armijo.dt.list[[paste(initial.i, iteration)]] <- data.table(
       initial.i, initial.x=first.x, iteration, new.x,
-      rbind(
-        data.table(value=sin(new.x), what="new objective"),
-        data.table(value=Taylor(new.x), what="q'(x)=0")))
+      armijo.slope, armijo.intercept)
     x0 <- new.x
   }
 }
-approx.dt <- rbindlist(approx.dt.list)
+ls.dt <- rbindlist(ls.dt.list)
 armijo.dt <- rbindlist(armijo.dt.list)
   initial.dt <- rbindlist(initial.dt.list)
   
 frames <- function(frame.vals, dt){
   data.table(frame=frame.vals)[, data.table(dt), by=frame][, Frame := iteration+(frame-1)/3][]
 }   
-quad.line.dt <- frames(2:3, approx.dt)
+quad.line.dt <- frames(2:3, ls.dt)
 init.point.dt <- rbind(
   frames(1:2, initial.dt[, .(initial.i, initial.x, iteration, x0, fx, what="f(x*) guess")]),
   frames(3, armijo.dt[what=="q'(x)=0", .(initial.i, initial.x, iteration, x0=new.x, fx=value, what)]))
