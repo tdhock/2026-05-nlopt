@@ -18,27 +18,47 @@ inf.f <- function(y)fcase(
   default=y)
 grid.x <- seq(x.min, x.max, l=200)
 grid.dt <- data.table(grid.x, fx=sin(grid.x), what="objective")
-grid.by <- 2
 grid.by <- 0.1
+grid.by <- 2
 initial.x <- seq(x.min, x.max, by=grid.by)[-1]
 approx.dt.list <- list()
 armijo.dt.list <- list()
 initial.dt.list <- list()
 grad.dt.list <- list()
+initial.x=5
 for(initial.i in seq_along(initial.x)){
   x0 <- first.x <- initial.x[initial.i]
   done <- FALSE
+  last.frame <- 0
+  frame <- function(n=1){
+    out <- data.table(frame=seq(last.frame+1, last.frame+n))
+    last.frame <<- last.frame+n
+    out
+  }
   iteration <- 0
   while(!done){
     iteration <- iteration+1
+    x0.grad <- cos(x0)
+    x0.dir <- -x0.grad
     initial.dt.list[[paste(initial.i, iteration)]] <- data.table(
-      initial.i, initial.x=first.x, iteration, x0, fx=sin(x0), abs.grad=abs(cos(x0)), what="initial")
+      initial.i, initial.x=first.x, iteration, x0, fx=sin(x0), abs.grad=abs(x0.grad), what="initial")
+    grid.dt[, plot(grid.x, fx, type="l")]
+    points(x0, sin(x0))
+    arrows(x0, sin(x0), x0+x0.dir, sin(x0), length=0.1)
     step.size <- 2^seq(0, -20)
-    fx.at.step <- x0-cos(x0)*step.size
+    fx.at.step <- sin(x0+x0.dir*step.size)
     tau <- 0.2
-    armijo.slope <- tau*cos(x0)
+    armijo.slope <- tau*x0.grad*x0.dir
     armijo.intercept <- sin(x0)
+    curve(sin(x0+x0.dir*x), 0, 1)
+    abline(armijo.intercept, armijo.slope)
     armijo.vec <- armijo.intercept+step.size*armijo.slope
+    points(step.size, armijo.vec)
+    points(step.size, fx.at.step)
+    armijo.ok <- fx.at.step<armijo.vec
+    if(all(armijo.ok==FALSE))stop("no admissible steps")
+    first.ok <- which(armijo.ok)[1]
+    armijo.show <- 1:first.ok
     approx.dt.list[[paste(initial.i, iteration)]] <- data.table(
       initial.i, initial.x=first.x, iteration, grid.x, qx=Taylor(grid.x), what="approx")
     new.x <- x0+cos(x0)/sin(x0)
@@ -53,7 +73,8 @@ for(initial.i in seq_along(initial.x)){
 }
 approx.dt <- rbindlist(approx.dt.list)
 armijo.dt <- rbindlist(armijo.dt.list)
-initial.dt <- rbindlist(initial.dt.list)
+  initial.dt <- rbindlist(initial.dt.list)
+  
 frames <- function(frame.vals, dt){
   data.table(frame=frame.vals)[, data.table(dt), by=frame][, Frame := iteration+(frame-1)/3][]
 }   
