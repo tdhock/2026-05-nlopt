@@ -10,3 +10,4 @@ ROP631/542 Optimisation non linéaire
 
 - [Galérie de visualisations de l’optimisation](https://tdhock.github.io/gallery-opt/)
 - [Visualisation](https://tdhock.github.io/2026-05-25-Newton-stationary-point/) de l’algorithme de Newton, [code](figure-newton.R).
+- [Visualisation](https://tdhock.github.io/2026-06-01-trust-region-sin) de l’algorithme de region de confiance, [code](figure-trust-region.R).
