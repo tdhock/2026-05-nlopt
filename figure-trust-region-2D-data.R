@@ -96,15 +96,15 @@ ggplot()+
     data=grid.dt)+
   scale_fill_gradient(low="red", high="white")
 
-iseq <- seq(-4, 4, by=1)
 iseq <- seq(-4, 4, by=4)#for testing
+iseq <- seq(-4, 4, by=1)
 vector.dt.list <- list()
 opt.vec.dt.list <- list()
 ball.q.dt.list <- list()
 ball.f.dt.list <- list()
 step.dt.list <- list()
 q.grid.dt.list <- list()
-(initial.dt <- CJ(V1=iseq, V2=iseq, radius=2^seq(-2, 6))[
+(initial.dt <- CJ(V1=iseq, V2=iseq, radius=2^seq(-6, 6, by=2))[
 , x.start := sprintf("%.1f, %.1f", V1, V2)
 ][])
 
@@ -116,7 +116,7 @@ for(param.i in 1:nrow(initial.dt)){
   Delta.start <- Delta <- initial.row$radius
   cat(sprintf("%d / %d params %s r=%.3f\n", param.i, nrow(initial.dt), x.start, Delta.start))
   step.num <- 0
-  grad.thresh <- 1e-10
+  grad.thresh <- 1e-8
   action <- "initial"
   while({
     norm.grad <- L2norm(c.vec <- xg(current.x))
