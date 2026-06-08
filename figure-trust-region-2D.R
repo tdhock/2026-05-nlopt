@@ -29,6 +29,7 @@ viz <- animint(
   out.dir="figure-trust-region-2D",
   duration=list(step.num=500),
   title="2D Trust region and conjugate gradient",
+  source="https://github.com/tdhock/2026-05-nlopt/blob/main/figure-trust-region-2D.R",
   steps=ggplot()+
     ggtitle("Select step and initial region size Δ")+
     theme_animint(width=500, height=500)+
@@ -211,8 +212,9 @@ viz <- animint(
       breaks=c(-1, 0, 1),
       labels=c("-Δ", "0", "Δ"))
 )
+
 viz
 
 if(FALSE){
-  animint2pages(viz, "2026-06-05-trust-region-2D", chromote_sleep_seconds)
+  animint2pages(viz, "2026-06-05-trust-region-2D", chromote_sleep_seconds=3)
 }
