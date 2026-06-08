@@ -42,13 +42,14 @@ iseq <- seq(-4, 4, by=4)#for testing
 vector.dt.list <- list()
 opt.vec.dt.list <- list()
 step.dt.list <- list()
-(initial.dt <- CJ(V1=iseq, V2=iseq)[
+(initial.dt <- CJ(V1=iseq, V2=iseq, tau=seq(0.1, 0.4, by=0.1))[
 , x.start := sprintf("%.1f, %.1f", V1, V2)
 ][])
 
 for(param.i in 1:nrow(initial.dt)){
   initial.row <- initial.dt[param.i]
   x.start <- initial.row$x.start
+  tau <- initial.row$tau
   #current.x <- c(-4.0, 0)
   current.x <- initial.row[, c(V1, V2)]
   Delta.start <- Delta <- initial.row$radius
@@ -63,7 +64,6 @@ for(param.i in 1:nrow(initial.dt)){
   }){
     dir.vec <- -c.vec
     (step.size.vec <- 2^seq(0, -20))
-    tau <- 0.2
     armijo.slope <- tau*t(c.vec) %*% dir.vec
     armijo.intercept <- xf(current.x)
     fstep <- function(step.vec){
@@ -106,13 +106,9 @@ for(param.i in 1:nrow(initial.dt)){
     current.x <- current.x+cgrad.dir
   }
 }
-(vector.dt <- rbindlist(vector.dt.list))
-(ball.f.dt <- rbindlist(ball.f.dt.list))
-(ball.q.dt <- rbindlist(ball.q.dt.list))
 (opt.vec.dt <- rbindlist(opt.vec.dt.list))
-(q.grid.dt <- rbindlist(q.grid.dt.list))
 (step.dt <- rbindlist(step.dt.list)[
 , next.action := c(action[-1], "end")
 , by=.(x.start, Delta.start)][])
-Delta.dt <- unique(step.dt[, .(Delta.start)])
-save(vector.dt, ball.f.dt, ball.q.dt, opt.vec.dt, q.grid.dt, step.dt, Delta.dt, grid.dt, initial.dt, ball.path.dt, file="figure-trust-region-2D-data.RData")
+
+save(vector.dt, ball.f.dt, ball.q.dt, opt.vec.dt, q.grid.dt, step.dt, Delta.dt, grid.dt, initial.dt, ball.path.dt, file="figure-armijo-2D-data.RData")
