@@ -65,6 +65,8 @@ ggplot()+
     high="red")
 
 viz <- animint(
+  title="Grid search for hard margin support vector machine",
+  source="https://github.com/tdhock/2026-05-nlopt/blob/main/figure-svm.R",
   out.dir="figure-svm",
   duration=list(slope_intercept=500),
   data=ggplot()+

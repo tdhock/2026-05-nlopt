@@ -1,0 +1,79 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath,amsfonts}
+\usepackage{fullpage}
+\usepackage[utf8]{inputenc}
+
+\begin{document}
+
+TP2, ROP631, été 2026, Prof. Toby HOCKING, à rendre le 10 juillet.
+
+\section{exercice 3.2.1}
+Soit $h(x+d\theta)$ la fonction pour recherche linéaire, à partir d’un point $x\in \mathbb R^n$, dans la direction $d\in\mathbb R^n$, d’un longueur (pas) $\theta>0$.
+Considérons le problème
+$\min_{a\le\theta\le b}h(\theta)$. Si un point $\theta_0$ est
+dans l'intérieur de l'intervalle $[a,b]$, alors le théorème 2.2.1
+s'applique directement; lorsque $\theta_0=a$ ou $\theta_0=b$, il
+suffit que $h$ soit croissante (en $a$) ou décroissante (en $b$)
+pour avoir un minimum local sous contrainte: en effet, on ne compare
+$a$ qu'avec des valeurs $\theta\ge a$. Obtenez une condition
+nécessaire et suffisante pour que $a$ ou $b$ soient des minima
+locaux de $h$. L'exercice consiste donc à fournir les conditions encadrées et démontrer:
+\begin{quotation}
+  $\theta^*$ est min local de la fonction $h$ si et seulement si
+  \begin{itemize}
+  \item[$\bullet$] $\theta^*=a$ et \fbox{conditions pour que $h$ soit croissante}   ou
+  \item[$\bullet$] $a<\theta^*<b$ et la première dérivée non nulle de $h$ est d'ordre pair et de signe positif ou
+  \item[$\bullet$] $\theta^*=b$ et \fbox{conditions pour que $h$ soit décroissante.}
+  \end{itemize}
+\end{quotation}
+
+\section{exercice 3.2.7}
+Dans cet exercice, nous explorons un problème d'ajuste\-ment de
+fonction. Les valeurs suivantes de $x$ et $y$ sont données: 
+$$\begin{tabular}{|l||l|l|l|l|}
+\hline
+x&0&1&2&3\\
+\hline
+y&0&0&3&9\\
+\hline
+\end{tabular}$$
+On soupçonne qu'une relation d'ordre 3 relie $x$ à $y$, et on envisage
+un modèle du type $y=a_0 + a_3x^3$.
+  \begin{enumerate}
+    \item Formulez le problème 
+    d'identifier les valeurs de $a_0$ et $a_3$ qui minimisent la somme des carrés
+    des différences entre le modèle et les données.
+    \item Exprimez les conditions d'optimalité (nécessaires et
+    suffisantes, de premier et second ordre) du problème en a).
+    \item Nous allons traiter une simplification du problème en supposant que $a_0=0$, donc que la relation recherchée
+    est purement cubique (nouveau problème avec seulement $a_3$). On analyse ici le problème de dimension un qui ne comporte que la variable $a_3$. Cette
+    simplification semble raisonnable puisque pour $x=0$, $y=0$.
+    \begin{enumerate}
+    \item calculez la valeur de $a_3$ qui minimise la somme des carrés
+    des différences entre le modèle simplifié et les données; 
+    \item est-ce que les conditions suffisantes d'optimalité sont
+    satisfaites pour la solution du problème de dimension un en i)?
+    \end{enumerate}
+    \item Revenons maintenant au modèle de dimension deux en a) pour calculer les valeurs de $a_0$ et $a_3$. 
+    Calculez les valeurs de $a_0$ et $a_3$ du modèle
+     avec l'algorithme du gradient conjugué.
+Est-ce que les conditions suffisantes d'optimalité sont
+    satisfaites?  
+\end{enumerate}
+
+\section{exercice 3.3.1}
+Pour la fonction $x^2+2y^2+4x+4y$, vérifiez par induction que l'algorithme du gradient amorcé à l'origine engendre la suite $\begin{pmatrix}{2\over3^k}-2\\ \left(-{1\over3}\right)^k-1\end{pmatrix}$. Déduisez-en le minimum de la fonction.
+
+\section{exercice 3.11.2}
+
+Utilisez Julia pour implanter deux algorithmes d’optimisation : comparez les résultats de l'algorithme d'Armijo (avec direction = négative gradient), avec l’algorithme de régions de confiance (avec pas de Newton calculé avec le gradient conjugué).
+Votre programme utilisera trois fonctions qui retournent respectivement $f(x)$, $\nabla f(x)$ et $\nabla^2f(x)$.
+Testez vos programmes avec (1) la fonction que nous avons étudié dans les démos, $f(x)=(x_1^2 + x_2 - 11)^2 + (x_1+x_2^2-7)^2$, et (2) la fonction de Rosenbrock : $f(x)=100(x_2-x_1^2)^2 + (1-x_1)^2$ à partir du point de départ $(-1.2,1.0)^t$. Cette fonction a longtemps constitué un défi pour les programmes de minimisation. Les modifications de l'algorithme de Newton traitent habituellement cette fonction facilement.
+
+Comme dans les démos, faire un graphique (ou tableau) avec les valeurs de $f(x_k)$ et $||\nabla f(x_k)||$ au fil des itérations $k$.
+
+Est-ce que vous voyez des vitesses de convergence linéaire / quadratique comme attendu ?
+
+Est-ce que vos résultats sont consistents avec les démos ?
+
+\end{document}
